@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Users API Practice</title>
 </head>
+
 <body>
   <h1>Users</h1>
+  <label for="apiSelect">Choose backend:</label>
+  <select id="apiSelect">
+    <option value="http://127.0.0.1:3000">Node.js API</option>
+    <option value="http://127.0.0.1:8000">Python API</option>
+  </select>
   <button id="loadButton">Load Users</button>
   <p id="status" role="status"></p>
   <ul id="userList"></ul>
@@ -22,9 +29,8 @@
       list.replaceChildren();
 
       try {
-        const response = await fetch(
-          "http://127.0.0.1:3000/api/v1/users"
-        );
+        const apiUrl = document.getElementById("apiSelect").value;
+        const response = await fetch(`${apiUrl}/api/v1/users`);
 
         if (!response.ok) {
           throw new Error(`API returned status ${response.status}`);
@@ -58,4 +64,5 @@
     });
   </script>
 </body>
+
 </html>
