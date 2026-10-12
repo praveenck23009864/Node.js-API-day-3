@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Users API Practice</title>
+</head>
+<body>
+  <h1>Users</h1>
+  <button id="loadButton">Load Users</button>
+  <p id="status" role="status"></p>
+  <ul id="userList"></ul>
+
+  <script>
+    const button = document.getElementById("loadButton");
+    const status = document.getElementById("status");
+    const list = document.getElementById("userList");
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "Loading users...";
+      list.replaceChildren();
+
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:3000/api/v1/users"
+        );
+
+        if (!response.ok) {
+          throw new Error(`API returned status ${response.status}`);
+        }
+
+        const users = await response.json();
+
+        if (!Array.isArray(users)) {
+          throw new Error("Unexpected API response");
+        }
+
+        if (users.length === 0) {
+          status.textContent = "No users found.";
+          return;
+        }
+
+        for (const user of users) {
+          const item = document.createElement("li");
+          item.textContent = `${user.id}: ${user.name} — ${user.email}`;
+          list.appendChild(item);
+        }
+
+        status.textContent = `${users.length} user(s) loaded.`;
+      } catch (error) {
+        console.error(error);
+        status.textContent =
+          "Unable to load users. Check the backend and try again.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
