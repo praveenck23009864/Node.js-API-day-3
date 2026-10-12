@@ -1,0 +1,364 @@
+
+/* ===== GLOBAL STYLES ===== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: block;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #eaf2ff, #f8fbff);
+  color: #1e293b;
+}
+
+/* ===== MAIN APP CONTAINER ===== */
+
+#root {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+#root > div {
+  width: calc(100% - 32px);
+  max-width: 700px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== HEADINGS ===== */
+
+h1 {
+  font-size: 28px;
+  color: #1d4ed8;
+  text-align: center;
+  margin: 0 0 30px;
+}
+
+h2 {
+  font-size: 21px;
+  color: #334155;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+/* ===== LABELS ===== */
+
+label {
+  display: inline-block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+/* ===== INPUTS AND SELECT ===== */
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+input::placeholder {
+  color: #94a3b8;
+}
+
+select {
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+/* ===== BUTTONS ===== */
+
+button {
+  display: inline-block;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  background-color: #2563eb;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+
+/* ===== CREATE / UPDATE FORM ===== */
+
+form {
+  background: #f8fafc;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+form input {
+  margin-bottom: 5px;
+}
+
+form button[type="submit"] {
+  background-color: #16a34a;
+}
+
+form button[type="submit"]:hover {
+  background-color: #15803d;
+}
+
+/* CANCEL BUTTON */
+
+form button[type="button"] {
+  background-color: #64748b;
+}
+
+form button[type="button"]:hover {
+  background-color: #475569;
+}
+
+/* ===== STATUS MESSAGES ===== */
+
+p[role="status"] {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 18px;
+  padding: 10px 14px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 8px;
+}
+
+p[role="status"]:empty {
+  display: none;
+}
+
+/* ===== USER LIST ===== */
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+ul li {
+  padding: 18px;
+  margin-bottom: 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s;
+  overflow-wrap: anywhere;
+}
+
+ul li:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+}
+
+ul li strong {
+  color: #1e40af;
+  font-size: 16px;
+}
+
+ul li div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* EDIT BUTTON */
+
+ul li button:first-child {
+  background-color: #f59e0b;
+}
+
+ul li button:first-child:hover {
+  background-color: #d97706;
+}
+
+/* DELETE BUTTON */
+
+ul li button:last-child {
+  background-color: #ef4444;
+}
+
+ul li button:last-child:hover {
+  background-color: #dc2626;
+}
+
+/* ===== RESPONSIVE MOBILE DESIGN ===== */
+
+@media (max-width: 600px) {
+  #root > div {
+    margin: 16px auto;
+    padding: 20px !important;
+  }
+
+  h1 {
+    font-size: 23px;
+  }
+
+  h2 {
+    font-size: 19px;
+  }
+
+  form {
+    padding: 15px;
+  }
+
+  button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  ul li {
+    padding: 14px;
+  }
+}
+
+/* ===== DELETE WARNING POPUP ===== */
+
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Warning Box */
+.delete-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: popupOpen 0.25s ease-out;
+}
+
+/* Warning Icon */
+.delete-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  background: #fee2e2;
+  color: #dc2626;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+}
+
+/* Warning Heading */
+.delete-modal h3 {
+  font-size: 24px;
+  color: #991b1b;
+  margin-bottom: 12px;
+}
+
+/* Warning Message */
+.delete-modal p {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* Buttons Layout */
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Cancel Button */
+.delete-actions .delete-cancel {
+  background: #e2e8f0;
+  color: #334155;
+  flex: 1;
+}
+
+.delete-actions .delete-cancel:hover {
+  background: #cbd5e1;
+}
+
+/* Confirm Delete Button */
+.delete-actions .delete-confirm {
+  background: #dc2626;
+  color: white;
+  flex: 1;
+}
+
+.delete-actions .delete-confirm:hover {
+  background: #b91c1c;
+}
+
+/* Popup Animation */
+@keyframes popupOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .delete-modal {
+    padding: 22px;
+  }
+
+  .delete-actions {
+    flex-direction: column;
+  }
+}
