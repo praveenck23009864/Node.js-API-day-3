@@ -14,7 +14,32 @@
     <option value="http://127.0.0.1:3000">Node.js API</option>
     <option value="http://127.0.0.1:8000">Python API</option>
   </select>
+
+
+
+
+  </form>
+
+
+
   <button id="loadButton">Load Users</button>
+
+  <h2>Create New User</h2>
+
+  <form id="createUserForm">
+    <label for="userName">Name:</label>
+    <input type="text" id="userName" required>
+
+    <label for="userEmail">Email:</label>
+    <input type="email" id="userEmail" required>
+
+    <button type="submit" id="createButton">
+      Create User
+    </button>
+  </form>
+
+  <h2>User List</h2>
+
   <p id="status" role="status"></p>
   <ul id="userList"></ul>
 
@@ -22,6 +47,49 @@
     const button = document.getElementById("loadButton");
     const status = document.getElementById("status");
     const list = document.getElementById("userList");
+
+
+    const createForm = document.getElementById("createUserForm");
+    const createButton = document.getElementById("createButton");
+
+    createForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("userName").value.trim();
+      const email = document.getElementById("userEmail").value.trim();
+      const apiUrl = document.getElementById("apiSelect").value;
+
+      createButton.disabled = true;
+      status.textContent = "Creating user...";
+
+      try {
+        const response = await fetch(`${apiUrl}/api/v1/users`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API returned status ${response.status}`);
+        }
+
+        const user = await response.json();
+
+        status.textContent = `User ${user.name} created successfully!`;
+        createForm.reset();
+
+        button.click();
+      } catch (error) {
+        console.error(error);
+        status.textContent =
+          "Unable to create user. Check the backend and try again.";
+      } finally {
+        createButton.disabled = false;
+      }
+    });
+
 
     button.addEventListener("click", async () => {
       button.disabled = true;
@@ -47,9 +115,80 @@
           return;
         }
 
+
         for (const user of users) {
           const item = document.createElement("li");
-          item.textContent = `${user.id}: ${user.name} — ${user.email}`;
+
+          const userText = document.createElement("span");
+          userText.textContent =
+            `${user.id}: ${user.name} — ${user.email} `;
+
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+
+          editButton.addEventListener("click", async () => {
+            const newName = prompt("Enter new name:", user.name);
+
+            if (newName === null) return;
+
+            if (!newName.trim()) {
+              alert("Name cannot be empty.");
+              return;
+            }
+
+            try {
+              const response = await fetch(
+                `${apiUrl}/api/v1/users/${user.id}`,
+                {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ name: newName.trim() })
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error(`Update failed: ${response.status}`);
+              }
+
+              button.click();
+            } catch (error) {
+              console.error(error);
+              alert("Unable to update user.");
+            }
+          });
+
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+
+          deleteButton.addEventListener("click", async () => {
+            const confirmed = confirm(
+              `Delete ${user.name}? This cannot be undone.`
+            );
+
+            if (!confirmed) return;
+
+            try {
+              const response = await fetch(
+                `${apiUrl}/api/v1/users/${user.id}`,
+                {
+                  method: "DELETE"
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error(`Delete failed: ${response.status}`);
+              }
+
+              button.click();
+            } catch (error) {
+              console.error(error);
+              alert("Unable to delete user.");
+            }
+          });
+
+          item.append(userText, editButton, " ", deleteButton);
           list.appendChild(item);
         }
 
